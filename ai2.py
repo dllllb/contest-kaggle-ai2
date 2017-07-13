@@ -1,16 +1,3 @@
-# https://www.kaggle.com/c/the-allen-ai-science-challenge
-"""
-IR and word embedding sample: https://github.com/5vision/kaggle_allen
-samples: https://github.com/kemaswill/Allen_AI_Science_Challenge_JunweiPan
-Science Wikipedia articles: https://gist.github.com/sidharthshah/a3957238fcfcad53e46c
-Wikipedia dump: https://en.wikipedia.org/wiki/Special:Export
-
-Solutions:
-1-st place: https://github.com/Cardal/Kaggle_AllenAIscience
-2-nd place: https://github.com/bwilbertz/kaggle_allen_ai
-3-rd place: https://github.com/amsqr/Allen_AI_Kaggle
-"""
-
 import re
 from elasticsearch import Elasticsearch, ElasticsearchException
 from zipfile import ZipFile
@@ -22,12 +9,6 @@ from gensim.models import Word2Vec
 from nltk.corpus import stopwords
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import cross_val_score
-from sklearn.decomposition.pca import PCA
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
-
-from dstools.ml.ensemble import ModelEnsemble
-from dstools.util.timer import Timer
 
 
 def n_similarity(wv, ws1, ws2):
@@ -323,85 +304,3 @@ class IrEstimatorSum(BaseEstimator, ClassifierMixin):
     def predict(self, X):
         return self.predict_proba(X).idxmax(axis=1)
 
-
-def cv_test(est):
-    with Timer('cv'):
-        df = pd.read_csv('training_set.tsv', index_col='id', sep='\t')
-
-        scores = cross_val_score(
-            estimator=est,
-            X=df.drop('correctAnswer', axis=1),
-            y=df.correctAnswer,
-            cv=5,
-            n_jobs=1,
-            verbose=1)
-        print(est)
-        print(scores)
-        print('mean: {mean}, std: {std}'.format(mean=scores.mean(), std=scores.std()))
-
-
-def submission(est, name='results'):
-    with Timer('submission'):
-        df_train = pd.read_csv('training_set.tsv', index_col='id', sep='\t')
-        model = est.fit(df_train.drop('correctAnswer', axis=1), df_train.correctAnswer)
-
-        df = pd.read_csv('test_set.tsv.gz', index_col='id', sep='\t')
-        preds = model.predict(df)
-        res = pd.Series(preds, index=df.index, name='correctAnswer')
-        res.to_csv(name+'.csv', index_label='id', header=True)
-
-# mean: 0.383613928769, std: 0.0224772900287
-# cv execution time: 34.7804338932 sec
-est1 = IrEstimator('ck12-concepts')  # Concepts_b_v8_vdt_html.zip, stopwords
-
-# mean: 0.392806695044, std: 0.00974997673719
-# cv execution time: 49.3968729973 sec
-est1_1 = IrEstimatorRescoreSum('ck12-concepts')  # Concepts_b_v8_vdt_html.zip, stopwords
-
-# mean: 0.367610590866, std: 0.00736769904979
-# cv execution time: 49.5336530209 sec
-est1_2 = IrEstimatorSum('ck12-concepts')  # Concepts_b_v8_vdt_html.zip, stopwords
-
-# mean: 0.305605320779, std: 0.00359779255663
-# cv execution time: 22.8514099121 sec
-est3 = GloveEstimator('glove.6B.300d-ai2.txt.bz2')
-
-# mean: 0.378805972527, std: 0.00684518647143
-# cv execution time: 134.214504004 sec
-est4 = ModelEnsemble(
-    intermediate_estimators=[
-        GloveEstimator('glove.6B.300d-ai2.txt.bz2'),
-        IrEstimator('ck12-concepts'),
-    ],
-    assembly_estimator=LogisticRegression(C=1),
-    ensemble_train_size=1
-)
-
-# mean: 0.378411475843, std: 0.0157684051548
-# cv execution time: 219.582041979 sec
-est5 = ModelEnsemble(
-    intermediate_estimators=[
-        GloveEstimator('glove.6B.300d-ai2.txt.bz2'),
-        IrEstimator('ck12-concepts'),
-    ],
-    assembly_estimator=Pipeline([
-        ('pca', PCA(n_components=4)),
-        ('lr', LogisticRegression(C=1)),
-    ]),
-    ensemble_train_size=1
-)
-
-# mean: 0.387199480557, std: 0.00767928030034
-# cv execution time: 305.623694897 sec
-est6 = ModelEnsemble(
-    intermediate_estimators=[
-        GloveEstimator('glove.6B.300d-ai2.txt.bz2'),
-        IrEstimatorRescoreSum('ck12-concepts'),
-    ],
-    assembly_estimator=LogisticRegression(C=1),
-    ensemble_train_size=1
-)
-
-# cv_test(est1_1)
-# submission(est10, 'results-sum2')
-# index_ck_12_conecpts_v8()
