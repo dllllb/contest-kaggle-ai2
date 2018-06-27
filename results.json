@@ -1,0 +1,72 @@
+[
+    {
+        "acc-mean": 0.383613928769,
+        "acc-std": 0.0224772900287,
+        "exec-time-sec": 34.7804338932,
+        "index": "ck12-concepts",
+        "w2v": "glove.6B.300d-ai2.txt.bz2",
+        "valid_mode": "cv",
+        "n_folds": 5,
+        "est_type": "ir"
+    },
+    {
+        "acc-mean": 0.392806695044,
+        "acc-std": 0.00974997673719,
+        "exec-time-sec": 49.3968729973,
+        "index": "ck12-concepts",
+        "w2v": "glove.6B.300d-ai2.txt.bz2",
+        "valid_mode": "cv",
+        "n_folds": 5,
+        "est_type": "irrs"
+    },
+    {
+        "acc-mean": 0.367610590866,
+        "acc-std": 0.00736769904979,
+        "exec-time-sec": 49.5336530209,
+        "index": "ck12-concepts",
+        "w2v": "glove.6B.300d-ai2.txt.bz2",
+        "valid_mode": "cv",
+        "n_folds": 5,
+        "est_type": "irs"
+    },
+    {
+        "acc-mean": 0.305605320779,
+        "acc-std": 0.00359779255663,
+        "exec-time-sec": 22.8514099121,
+        "index": "ck12-concepts",
+        "w2v": "glove.6B.300d-ai2.txt.bz2",
+        "valid_mode": "cv",
+        "n_folds": 5,
+        "est_type": "glove"
+    },
+    {
+        "acc-mean": 0.378805972527,
+        "acc-std": 0.00684518647143,
+        "exec-time-sec": 134.214504004,
+        "index": "ck12-concepts",
+        "w2v": "glove.6B.300d-ai2.txt.bz2",
+        "valid_mode": "cv",
+        "n_folds": 5,
+        "est_type": "gl+ir/lr"
+    },
+    {
+        "acc-mean": 0.378411475843,
+        "acc-std": 0.0157684051548,
+        "exec-time-sec": 219.582041979,
+        "index": "ck12-concepts",
+        "w2v": "glove.6B.300d-ai2.txt.bz2",
+        "valid_mode": "cv",
+        "n_folds": 5,
+        "est_type": "gl+ir/pca+lr"
+    },
+    {
+        "acc-mean": 0.387199480557,
+        "acc-std": 0.00767928030034,
+        "exec-time-sec": 305.623694897,
+        "index": "ck12-concepts",
+        "w2v": "glove.6B.300d-ai2.txt.bz2",
+        "valid_mode": "cv",
+        "n_folds": 5,
+        "est_type": "gl+irrs/lr"
+    }
+]
