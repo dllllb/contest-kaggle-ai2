@@ -423,4 +423,4 @@ def test_validate():
         'n_folds': 2,
     }
     
-    print(validate(params))
+    print(validate(init_params(params)))
