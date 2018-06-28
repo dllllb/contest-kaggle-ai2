@@ -36,6 +36,7 @@ def update_model_stats(stats_file, params, results):
 def run_experiment(evaluator, params, stats_file):    
     import time
     
+    params = init_params(params)
     start = time.time()
     scores = evaluator(params)
     exec_time = time.time() - start
@@ -370,9 +371,7 @@ def init_params(overrides):
     return {**defaults, **overrides}
 
     
-def validate(params):
-    params = init_params(params)
-    
+def validate(params):    
     index = params['index']
     w2v = params['w2v']
     est_type = params['est_type']
