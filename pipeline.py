@@ -1,20 +1,17 @@
 import re
-import pandas as pd
-from elasticsearch import Elasticsearch, ElasticsearchException
 from zipfile import ZipFile
 from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
 from gensim import matutils
 from gensim.models import KeyedVectors
-from nltk.corpus import stopwords
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import cross_val_score
 from sklearn.pipeline import make_pipeline
 from sklearn.decomposition.pca import PCA
 from sklearn.linear_model import LogisticRegression
 
-from ds_tools.dstools.ml.ensemble import ModelEnsemble
+from ensemble import ModelEnsemble
 
 
 def update_model_stats(stats_file, params, results):
@@ -79,6 +76,9 @@ def n_similarity(wv, ws1, ws2):
     
 class StopwordTokenizer:
     def __init__(self):
+        import os
+        os.environ['NLTK_DATA'] = os.path.abspath(os.path.dirname(__file__))
+        from nltk.corpus import stopwords
         self.stopwords = set(stopwords.words("english"))
 
     def tokenize(self, text):
@@ -89,6 +89,7 @@ class StopwordTokenizer:
     
 
 def predict_ir(df, index, fields, search_type):
+    from elasticsearch import Elasticsearch, ElasticsearchException
     es = Elasticsearch()
 
     resutls = []
@@ -134,6 +135,7 @@ def predict_ir(df, index, fields, search_type):
 
 
 def predict_ir_rescore_sum(df, index, fields, search_type):
+    from elasticsearch import Elasticsearch, ElasticsearchException
     es = Elasticsearch()
 
     resutls = []
@@ -179,6 +181,7 @@ def predict_ir_rescore_sum(df, index, fields, search_type):
 
 
 def predict_ir_sum(df, index, fields, search_type):
+    from elasticsearch import Elasticsearch, ElasticsearchException
     es = Elasticsearch()
 
     resutls = []
@@ -211,6 +214,7 @@ def predict_ir_sum(df, index, fields, search_type):
 
 # http://www.ck12.org/flx/show/epub/user:anBkcmVjb3VydEBnbWFpbC5jb20./Concepts_b_v8_vdt.epub
 def index_ck_12_conecpts_v8(index_name='ck12-concepts'):
+    from elasticsearch import Elasticsearch, ElasticsearchException
     es = Elasticsearch()
 
     with ZipFile('Concepts_b_v8_vdt_html.zip') as zf:
