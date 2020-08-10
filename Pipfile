@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+pylint = "*"
+jupyter = "*"
+
+[packages]
+elasticsearch = ">=5.0.0,<6.0.0"
+beautifulsoup4 = ">=4"
+pandas = ">=0.20"
+numpy = ">=1.14"
+gensim = ">=3.4"
+scikit-learn = ">=0.19"
+
+[requires]
+python_version = "3.8"
